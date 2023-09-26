@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "author": "Imki Nasyiatul Laili",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-arduino-uno", "id": "uno", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-servo", "id": "servo1", "top": 253.6, "left": 172.93, "attrs": {} },
+    { "type": "wokwi-servo", "id": "servo2", "top": 255.92, "left": -33.26, "attrs": {} },
+    { "type": "wokwi-slide-switch", "id": "sw1", "top": 187.1, "left": 382.74, "attrs": {} },
+    {
+      "type": "wokwi-analog-joystick",
+      "id": "joystick1",
+      "top": -28.54,
+      "left": 305.57,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-analog-joystick",
+      "id": "joystick2",
+      "top": -35.39,
+      "left": -167.4,
+      "attrs": {}
+    },
+    { "type": "wokwi-servo", "id": "servo3", "top": 257.09, "left": -241.7, "attrs": {} },
+    { "type": "wokwi-servo", "id": "servo4", "top": 252.99, "left": 347.2, "attrs": {} }
+  ],
+  "connections": [
+    [ "servo2:GND", "uno:GND.2", "black", [ "h-18.92", "v-102.64", "h217.47" ] ],
+    [ "servo1:GND", "uno:GND.2", "black", [ "h0" ] ],
+    [ "servo1:V+", "uno:5V", "red", [ "h0" ] ],
+    [ "servo2:V+", "uno:5V", "red", [ "h-19.63", "v-110.71", "h206.77" ] ],
+    [ "servo2:PWM", "uno:5", "white", [ "h-19.63", "v-328.41", "h256.68" ] ],
+    [
+      "servo1:PWM",
+      "uno:6",
+      "green",
+      [ "h-18.16", "v-117.22", "h-203.92", "v-209.63", "h244.56" ]
+    ],
+    [ "sw1:1", "uno:10", "cyan", [ "v3.38", "h-106.92", "v-229.65", "h-128.82" ] ],
+    [ "sw1:3", "uno:11", "yellow", [ "v10.51", "h-128.92", "v-235.28", "h-135.32" ] ],
+    [ "sw1:2", "uno:GND.2", "black", [ "v7.29", "h-229.24" ] ],
+    [ "joystick1:VCC", "uno:5V", "red", [ "v118.68", "h-180.52" ] ],
+    [ "joystick1:VERT", "uno:A0", "blue", [ "v114.18", "h-141.46" ] ],
+    [ "joystick1:HORZ", "uno:A1", "white", [ "v43.07", "h-0.59", "v74.11", "h-139.68" ] ],
+    [ "joystick1:GND", "uno:GND.2", "black", [ "v118.68", "h-212.94" ] ],
+    [ "joystick1:SEL", "uno:2", "limegreen", [ "v36.33", "h-89.55", "v-128.01", "h-43.42" ] ],
+    [ "servo3:GND", "uno:GND.2", "black", [ "h-3.29", "v-102.85", "h413.38" ] ],
+    [ "servo3:V+", "uno:5V", "red", [ "h-5.36", "v-109.24", "h405.09" ] ],
+    [
+      "servo3:PWM",
+      "uno:3",
+      "magenta",
+      [ "h-9.5", "v-121.85", "h199.95", "v-207.21", "h278.69" ]
+    ],
+    [ "servo4:GND", "uno:GND.2", "black", [ "h-15.66", "v-76.25", "h-160.31" ] ],
+    [ "servo4:V+", "uno:5V", "red", [ "h-9.53", "v-84", "h-176.08" ] ],
+    [
+      "servo4:PWM",
+      "uno:9",
+      "#8f4814",
+      [ "h-13.03", "v-110.14", "h-54.31", "v-216.38", "h-113.88" ]
+    ],
+    [ "joystick2:GND", "uno:GND.2", "black", [ "v125.3", "h266.35" ] ],
+    [ "joystick2:SEL", "uno:4", "green", [ "v10.54", "h57.82", "v-95.49", "h262.81" ] ],
+    [ "joystick2:HORZ", "uno:A3", "gold", [ "v122.67", "h352.13" ] ],
+    [ "joystick2:VERT", "uno:A2", "cyan", [ "v123.55", "h353.85" ] ],
+    [ "joystick2:VCC", "uno:5V", "red", [ "v125.3", "h295.12" ] ]
+  ],
+  "dependencies": {}
+}
