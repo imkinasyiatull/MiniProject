@@ -22,7 +22,8 @@
       "attrs": {}
     },
     { "type": "wokwi-servo", "id": "servo3", "top": 257.09, "left": -241.7, "attrs": {} },
-    { "type": "wokwi-servo", "id": "servo4", "top": 252.99, "left": 347.2, "attrs": {} }
+    { "type": "wokwi-servo", "id": "servo4", "top": 252.99, "left": 347.2, "attrs": {} },
+    { "type": "wokwi-hc-sr04", "id": "ultrasonic1", "top": -123.11, "left": 52.54, "attrs": {} }
   ],
   "connections": [
     [ "servo2:GND", "uno:GND.2", "black", [ "h-18.92", "v-102.64", "h217.47" ] ],
@@ -64,7 +65,11 @@
     [ "joystick2:SEL", "uno:4", "green", [ "v10.54", "h57.82", "v-95.49", "h262.81" ] ],
     [ "joystick2:HORZ", "uno:A3", "gold", [ "v122.67", "h352.13" ] ],
     [ "joystick2:VERT", "uno:A2", "cyan", [ "v123.55", "h353.85" ] ],
-    [ "joystick2:VCC", "uno:5V", "red", [ "v125.3", "h295.12" ] ]
+    [ "joystick2:VCC", "uno:5V", "red", [ "v125.3", "h295.12" ] ],
+    [ "ultrasonic1:GND", "uno:GND.1", "black", [ "v25.67", "h-38.34" ] ],
+    [ "ultrasonic1:ECHO", "uno:12", "blue", [ "v23.49", "h-9.34" ] ],
+    [ "ultrasonic1:TRIG", "uno:13", "gold", [ "v24.11", "h-8.84" ] ],
+    [ "ultrasonic1:VCC", "uno:5V", "red", [ "v24.4", "h-175.69", "v205.77", "h211.85" ] ]
   ],
   "dependencies": {}
 }
