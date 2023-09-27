@@ -9,16 +9,11 @@
 #define hor1  A1
 #define ver2  A2
 #define hor2  A3
+#define ECHO_PIN 12
+#define TRIG_PIN 13
 
-Servo iniServo1;
-Servo iniServo2;
-Servo iniServo3;
-Servo iniServo4;
-
-int angle1 = 0;
-int angle2 = 0;
-int angle3 = 0;
-int angle4 = 0;
+Servo iniServo[4];
+int angle[4] = {0, 0, 0, 0};
 const int limit_angle = 180;
 const int L1 = 25;
 const int L2 = 25;
@@ -26,114 +21,96 @@ float x;
 float y;
 volatile float pi = 3.14159265359;
 
+//--------------------------------------- Speed
+int speed = 1;
+
+//--------------------------------------- Setup
 void setup() {
   Serial.begin(9600);
   pinMode(10, INPUT_PULLUP);
   pinMode(11, INPUT_PULLUP);
-  iniServo1.attach(3);
-  iniServo2.attach(5);
-  iniServo3.attach(6);
-  iniServo4.attach(9);
-  iniServo1.write(angle1);
-  iniServo2.write(angle2);
-  iniServo3.write(angle3);
-  iniServo4.write(angle4);
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  iniServo[0].attach(servo1_PIN);
+  iniServo[1].attach(servo2_PIN);
+  iniServo[2].attach(servo3_PIN);
+  iniServo[3].attach(servo4_PIN);
+  for (int i = 0; i < 4; i++) {
+    iniServo[i].write(angle[i]);
+  }
 }
 
+//--------------------------------------- Loop
 void loop() {
   if(digitalRead((10))){
-    iniServo1.write(angle1);
-    iniServo2.write(angle2);
-    iniServo3.write(angle3);
-    iniServo4.write(angle4);
+    // iniServo[0].write(angle[0]);
+    // iniServo[1].write(angle[1]);
+    // iniServo[2].write(angle[2]);
+    // iniServo[3].write(angle[3]);
     manual();
   }
+
   else if(digitalRead((11))){
-    iniServo2.write(0);
-    iniServo3.write(0);
+    float distance = readDistance();
+    Serial.println("distance : " + String(distance));
+    iniServo[1].write(0);
+    iniServo[2].write(0);
     x = 32.90;
     y = 29.85;
     inverseKinematics();
-    iniServo1.write(34.5);
+    iniServo[0].write(34.5);
     x = 20.23;
     y = 31.85;
     inverseKinematics();
-    iniServo4.write(90);
+    iniServo[3].write(90);
     delay(1000);
-    iniServo1.write(0);
-    iniServo2.write(0);
-    iniServo3.write(0);
-    iniServo4.write(0);
+    iniServo[0].write(0);
+    iniServo[1].write(0);
+    iniServo[2].write(0);
+    iniServo[3].write(0);
   }
 }
 
+//--------------------------------------- Manual
 void manual(){
-  while(analogRead(hor1) < 512){
-    if(angle1 < limit_angle){
-      iniServo1.write(angle1);
-      angle1 ++;
-      delay(20);
-      Serial.println(angle1);
-    }
+  if (angle[0] < limit_angle && analogRead(hor1) < 512) {
+    manualRotate(0, "CW");
   }
-  while(analogRead(hor1) > 512){
-    if(angle1 > 0){
-      iniServo1.write(angle1);
-      angle1 --;
-      delay(20);
-      Serial.println(angle1);
-    }
+  if (angle[0] > 0 && analogRead(hor1) > 512) {
+    manualRotate(0, "CCW");
   }
-  while(analogRead(ver1) < 512){
-    if(angle2 < limit_angle){
-      iniServo2.write(angle2);
-      angle2 ++;
-      delay(20);
-      Serial.println(angle2);
-    }
+  if (angle[1] < limit_angle && analogRead(ver1) < 512) {
+    manualRotate(1, "CW");
   }
-  while(analogRead(ver1) > 512){
-    if(angle2 > 0){
-      iniServo2.write(angle2);
-      angle2 --;
-      delay(20);
-      Serial.println(angle2);
-    }
+  if (angle[1] > 0 && analogRead(ver1) > 512) {
+    manualRotate(1, "CCW");
   }
-  while(analogRead(hor2) < 512){
-    if(angle3 < limit_angle){
-      iniServo3.write(angle3);
-      angle3 ++;
-      delay(20);
-      Serial.println(angle3);
-    }
+  if (angle[2] < limit_angle && analogRead(hor2) < 512) {
+    manualRotate(2, "CW");
   }
-  while(analogRead(hor2) > 512){
-    if(angle3 > 0){
-      iniServo3.write(angle3);
-      angle3 --;
-      delay(20);
-      Serial.println(angle3);
-    }
+  if (angle[2] > 0 && analogRead(hor2) > 512) {
+    manualRotate(2, "CCW");
   }
-  while(analogRead(ver2) < 512){
-    if(angle4 < limit_angle){
-      iniServo4.write(angle4);
-      angle4 ++;
-      delay(20);
-      Serial.println(angle4);
-    }
+  if (angle[3] < limit_angle && analogRead(ver2) < 512) {
+    manualRotate(3, "CW");
   }
-  while(analogRead(ver2) > 512){
-    if(angle4 > 0){
-      iniServo4.write(angle4);
-      angle4 --;
-      delay(20);
-      Serial.println(angle4);
-    }
+  if (angle[3] > 0 && analogRead(ver2) > 512) {
+    manualRotate(3, "CCW");
   }
 }
 
+void manualRotate(int index, String direction) {
+  if (direction == "CW") {
+    angle[index] += speed;
+  } else {
+    angle[index] -= speed;
+  }
+  iniServo[index].write(angle[index]);
+  delay(20);
+  Serial.println(angle[index]);
+}
+
+//--------------------------------------- Auto
 void inverseKinematics(){
   float angleik1;      
   float angleik2;       
@@ -147,15 +124,21 @@ void inverseKinematics(){
   angleik1= (rad_angle1*180)/pi;
   angleik2= (rad_angle2*180)/pi;
 
-  Serial.print("x is "); 
-  Serial.println(x);
-  Serial.print("y is "); 
-  Serial.println(y);
-  Serial.print("angle1 is  "); 
-  Serial.println(angleik1);
-  Serial.print("angle2 is "); 
-  Serial.println(angleik2);
-  iniServo2.write(angleik1); 
-  iniServo3.write(angleik2);
+  Serial.println("x is "+ String(x)); 
+  Serial.println("y is " + String(y)); 
+  Serial.println("angle[0] is " + String(angleik1)); 
+  Serial.println("angle[1] is " + String(angleik2)); 
+  iniServo[1].write(angleik1); 
+  iniServo[2].write(angleik2);
   delay(2000);
+}
+
+float readDistance() {
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+  int duration = pulseIn(ECHO_PIN, HIGH);
+  return duration * 0.034 / 2;
 }
