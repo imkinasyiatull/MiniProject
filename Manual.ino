@@ -1,101 +1,70 @@
 #include <Servo.h>
-#define servo_PIN 3
-#define servo_PIN 5
-#define servo_PIN 6
-#define servo_PIN 9
+#define servo_PIN_3 3
+#define servo_PIN_5 5
+#define servo_PIN_6 6
+#define servo_PIN_9 9
+
 #define sw1 2
 #define sw2 4
-#define ver1  A0
-#define hor1  A1
-#define ver2  A2
-#define hor2  A3
 
-Servo iniServo1;
-Servo iniServo2;
-Servo iniServo3;
-Servo iniServo4;
+#define ver1 A0
+#define hor1 A1
+#define ver2 A2
+#define hor2 A3
 
-int angle1 = 0;
-int angle2 = 0;
-int angle3 = 0;
-int angle4 = 0;
+Servo iniServo[4];
+int angle[4] = {0, 0, 0, 0};
 const int limit_angle = 180;
+
+// ---------------------------------------- Change speed
+int speed = 1;
+// -----------------------------------------------------
 
 void setup() {
   Serial.begin(9600);
-  iniServo1.attach(3);
-  iniServo2.attach(5);
-  iniServo3.attach(6);
-  iniServo4.attach(9);
-  iniServo1.write(angle1);
-  iniServo2.write(angle2);
-  iniServo3.write(angle3);
-  iniServo4.write(angle4);
+  iniServo[0].attach(servo_PIN_3);
+  iniServo[1].attach(servo_PIN_5);
+  iniServo[2].attach(servo_PIN_6);
+  iniServo[3].attach(servo_PIN_9);
+  for (int i = 0; i < 4; i++) {
+    iniServo[i].write(angle[i]);
+  }
 }
 
 void loop() {
-  while(analogRead(hor1) < 512){
-    if(angle1 < limit_angle){
-      iniServo1.write(angle1);
-      angle1 ++;
-      delay(20);
-      Serial.println(angle1);
-    }
+  if (angle[0] < limit_angle && analogRead(hor1) < 512) {
+    rotate(0, "CW");
   }
-  while(analogRead(hor1) > 512){
-    if(angle1 > 0){
-      iniServo1.write(angle1);
-      angle1 --;
-      delay(20);
-      Serial.println(angle1);
-    }
+  if (angle[0] > 0 && analogRead(hor1) > 512) {
+    rotate(0, "CCW");
   }
-  while(analogRead(ver1) < 512){
-    if(angle2 < limit_angle){
-      iniServo2.write(angle2);
-      angle2 ++;
-      delay(20);
-      Serial.println(angle2);
-    }
+  if (angle[1] < limit_angle && analogRead(ver1) < 512) {
+    rotate(1, "CW");
   }
-  while(analogRead(ver1) > 512){
-    if(angle2 > 0){
-      iniServo2.write(angle2);
-      angle2 --;
-      delay(20);
-      Serial.println(angle2);
-    }
+  if (angle[1] > 0 && analogRead(ver1) > 512) {
+    rotate(1, "CCW");
   }
-  while(analogRead(hor2) < 512){
-    if(angle3 < limit_angle){
-      iniServo3.write(angle3);
-      angle3 ++;
-      delay(20);
-      Serial.println(angle3);
-    }
+  if (angle[2] < limit_angle && analogRead(hor2) < 512) {
+    rotate(2, "CW");
   }
-  while(analogRead(hor2) > 512){
-    if(angle3 > 0){
-      iniServo3.write(angle3);
-      angle3 --;
-      delay(20);
-      Serial.println(angle3);
-    }
+  if (angle[2] > 0 && analogRead(hor2) > 512) {
+    rotate(2, "CCW");
   }
-  while(analogRead(ver2) < 512){
-    if(angle4 < limit_angle){
-      iniServo4.write(angle4);
-      angle4 ++;
-      delay(20);
-      Serial.println(angle4);
-    }
+  if (angle[3] < limit_angle && analogRead(ver2) < 512) {
+    rotate(3, "CW");
   }
-  while(analogRead(ver2) > 512){
-    if(angle4 > 0){
-      iniServo4.write(angle4);
-      angle4 --;
-      delay(20);
-      Serial.println(angle4);
-    }
+  if (angle[3] > 0 && analogRead(ver2) > 512) {
+    rotate(3, "CCW");
   }
+}
+
+void rotate(int index, String direction) {
+  if (direction == "CW") {
+    angle[index] += speed;
+  } else {
+    angle[index] -= speed;
+  }
+  iniServo[index].write(angle[index]);
+  delay(20);
+  Serial.println(angle[index]);
 }
